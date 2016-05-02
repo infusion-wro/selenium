@@ -15,13 +15,15 @@ import utils.UiSeleniumTestException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static context.SeleniumContext.SELENIUM_CONTEXT;
+
 public class PageObject<T extends PageElement> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(PageObject.class);
 
-    protected final long DEFAULT_TIMEOUT = 30;
-    protected final long ALERT_TIMEOUT = 5;
-    protected final String URL = "";
+    protected final long DEFAULT_TIMEOUT = SELENIUM_CONTEXT.getDefaultTimeout();
+    protected final long ALERT_TIMEOUT = SELENIUM_CONTEXT.getAlertTimeout();
+    protected final String URL = SELENIUM_CONTEXT.getUrl();
     protected final WebDriver SESSION;
 
     public PageObject(WebDriver session) {
