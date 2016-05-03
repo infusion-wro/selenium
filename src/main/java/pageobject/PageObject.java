@@ -7,9 +7,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pageobject.element.DropDownValue;
 import pageobject.element.PageElement;
 import pageobject.element.PlaceholdersProvider;
-import pageobject.element.dropdown.DropDownValue;
 import utils.UiSeleniumTestException;
 
 import java.util.ArrayList;
@@ -105,6 +105,11 @@ public class PageObject<T extends PageElement> {
         return getWebElement(element, placeholders).getText();
     }
 
+    protected void setSelectedOption(T element, DropDownValue value, String... placeholders) throws
+            UiSeleniumTestException {
+        setSelectedOption(element, value.getValue(), placeholders);
+    }
+
     protected String getSelectedOption(T element, String... placeholders) {
         return new Select(getWebElement(element, placeholders)).getFirstSelectedOption().getText();
     }
@@ -137,11 +142,6 @@ public class PageObject<T extends PageElement> {
 
     public void untickCheckbox(T element, String... placeholders) {
         adjustCheckboxState(element, false, placeholders);
-    }
-
-    public void setSelectedOption(T element, DropDownValue value, String... placeholders) throws
-            UiSeleniumTestException {
-        setSelectedOption(element, value.getValue(), placeholders);
     }
 
     public void shouldHave(T element, String... placeholders) {

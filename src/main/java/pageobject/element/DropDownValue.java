@@ -1,4 +1,4 @@
-package pageobject.element.dropdown;
+package pageobject.element;
 
 public interface DropDownValue {
 

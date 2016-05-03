@@ -1,4 +1,4 @@
-package pageobject.impl;
+package pageobject.impl.main;
 
 import by.ByFactory;
 import by.ByType;
