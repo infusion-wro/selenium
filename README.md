@@ -38,7 +38,7 @@ This **%s** is a placeholder which can be provided in getBy() method. It will b
 
 ###DropDownValue
 
-DropDownValue interface is representing an option that can be selected in drop down. It is then implemented by enums that are holding the values for particular drop downs used all across the site. It is used because of two reasons: to make sure that only the values available in the given drop down can be selected and to make sure if the drop down value will be changed we will make an adjustment only in one class without making changes in the test code.
+**DropDownValue** interface is representing an option that can be selected in drop down. It is then implemented by enums that are holding the values for particular drop downs used all across the site. It is used because of two reasons: to make sure that only the values available in the given drop down can be selected and to make sure if the drop down value will be changed we will make an adjustment only in one class without making changes in the test code.
 
 ###PageObject
 
@@ -62,7 +62,7 @@ The last level of the framework are the methods implemented in concrete PageObje
 **UiTestSelenium** is a class that should be extended by every Selenium based test. It is simply holding the Selenium web driver instance (SESSION) and it creates the new instance of it before every test and closes it after every test to make sure we have a clean session in every test. In the test code we are giving this session as a parameter of a MainPage page object
 constructor in the first step of a test to navigate to the main page of our application. In the next steps we are interacting with the page objects in the same way the user would interact with the site - clicking some buttons, filling some text fields, ticking the checkboxes etc. Whenever we need to navigate to another page by clicking some link a new page object related to that part of the site is returned for us. From that point we are interacting with this new page object as a user with a newly opened page would. To see a good example of it please see the **SampleTest** class.
 
-All the test are following the GIVEN - WHEN - THEN convention with a proper comments in the code. Here also I took the convention that there is no actual THEN section because if something gone wrong during the execution of the test then the custom UiTestException is thrown. If all the steps of the test executes successfully then I assume the test is passed with green status.
+All the test are following the GIVEN - WHEN - THEN convention with a proper comments in the code. Here also I took the convention that there is no actual THEN section because if something gone wrong during the execution of the test then the custom **UiTestException** is thrown. If all the steps of the test executes successfully then I assume the test is passed with green status.
 
 ###Test suites
 
