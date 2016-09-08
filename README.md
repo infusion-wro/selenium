@@ -15,20 +15,21 @@ The method named **getNewSession()** returns actual new instance of the web dr
 
 ###PageElement
 
-The **PageElement** interface represents a particular element of the page. It consists of four methods:
+The **PageElement** interface represents a particular element of the page. It consists of three methods:
 
 * **getBy(String... placeholders)** - this method returns a **By** object which is used by Selenium to locate particular element on the site. It takes a placeholders as a parameters because it is possible to have elements with dynamically created locators and By object is immutable,
 * **getType()** - it returns a textual representation of the locator type of this element (i.e. xpath, name, id). There is no method to get this information from By object. It can be used for debugging purposes,
 * **getExpression()** - it returns a textual representation of the expression used to locate this element (i.e. //td[2], searchButton). There is no method to get this information from By object. It can be used for debugging purposes.
 
-In the framework this interface is implemented by an enums which are grouping elements connected with a particular site i.e. MainPageElement. Every element of such enum has three fields:
+In the framework this interface is implemented by an enums which are grouping elements connected with a particular site i.e. MainPageElement. Every element of such enum has two fields:
 
 * **BY_TYPE** - it is an enum value which is telling what kind of expression will be used to locate the element i.e xpath, name, id,
 * **EXPRESSION** - it is an actual expression that will locate element i.e. //td[2], searchButton,
 
-Again if the code of UI will change only those enums has to be adjusted - test code will stay thesame. 
+Again if the code of UI will change only those enums has to be adjusted - test code will stay the same. 
 
-In this place it is worth to mention that there is a possibility to locate an elements with dynamically created expressions. Let's consider an example. We want to search for a result on results page by providing the information like date, tournament and match which is given in runtime. The xpath of particular row consist of those information and we don't want to hard-code it in our xpath expression for locating that row. In that case we can use an expression with placeholders i.e. //tr[@id='%s']/td. This %s is a placeholder which can be provided in getBy() method. It will be then replaced by a ByFactory in runtime and the final expression will be provided i.e. getBy("someId") will give an xpath locator //tr[@id='someId']/td. To support that functionality there is also a **PlaceholdersProvider** interface provided. It can be implemented by a class that represents some common object in a system like **ResultRow**. It holds the parameters of the object like date, tournament etc. and provides a method **getPlaceholders()** which is returning an array of strings that can be used to resolve a placeholders in a locator expression.
+In this place it is worth to mention that there is a possibility to locate an elements with dynamically created expressions. Let's consider an example. We want to search for a result on results page by providing the information like date, tournament and match which is given in runtime. The xpath of particular row consist of those information and we don't want to hard-code it in our xpath expression for locating that row. In that case we can use an expression with placeholders i.e. //tr[@id='%s']/td.
+This **%s** is a placeholder which can be provided in getBy() method. It will be then replaced by a ByFactory in runtime and the final expression will be provided i.e. getBy("someId") will give an xpath locator //tr[@id='someId']/td. To support that functionality there is also a **PlaceholdersProvider** interface provided. It can be implemented by a class that represents some common object in a system like **ResultRow**. It holds the parameters of the object like date, tournament etc. and provides a method **getPlaceholders()** which is returning an array of strings that can be used to resolve a placeholders in a locator expression.
 
 ###ByFactory
 
@@ -48,8 +49,11 @@ The one of the most important features of PageObject is a **getWebElement(T elem
 * it constructs the Selenium By locator using the getBy(placeholders) abstract method from PageElement interface,
 * it waits for an element to be clickable using the explicit wait so it returns an WebElement only when it is ready to interaction i.e. clicking, sending text etc. 
 
-This method is private because we didn't want to use Selenium related code (like WebElement class) in too many places because it will cause the tight coupling. All the methods that are using Selenium related classes are private. All the mechanisms like waits, element locating and so on are hidden in PageObject class. This can be called the deepest level of the framework which should need the least amount of changes. The second level of the framework are the methods that have protected modifier. They are directly available in a classes extending the PageObject class. However, they are related with page elements interaction that shouldn't be visible and available from the actual test code. When we are calling a method which causes the load of the new page we are returning a PageObject related to this new site as a result i.e. calling the method clickResultsPage() in MainPage page object will click the link and return an ResultsPage page object as a result. Then we can interact with this new page object. The last level of the framework are the methods implemented in concrete PageObject classes and a public methods from the abstract PageObject. Those methods can be called directly in test's code. The methods implemented in classes extending the PageObject are grouping some common
-functionalities related with particular pages in like choosing a tournament or a season. The public methods in PageObject class allows to interact with page elements like clicking them, sending keys, ticking the checkbox, setting the drop down value etc. Those interactions are also available for WebElement objects from Selenium but again we are not manipulating directly on them to be less dependent on the external framework. One of the interesting methods is the **clickAndWaitForPageToLoad(T element, String... placeholders)**. Sometimes in the application application there is a lot of buttons and other controls that arecausing the page to reload. To be sure that we are checking the state of the control after the reload not before or during it, we can call this method for an element that is causing the page to reload. PageObject will then take care of everything.
+This method is private because we didn't want to use Selenium related code (like WebElement class) in too many places because it will cause the tight coupling. All the methods that are using Selenium related classes are private. All the mechanisms like waits, element locating and so on are hidden in PageObject class. This can be called the deepest level of the framework which should need the least amount of changes.
+
+The second level of the framework are the methods that have protected modifier. They are directly available in a classes extending the PageObject class. However, they are related with page elements interaction that shouldn't be visible and available from the actual test code. When we are calling a method which causes the load of the new page we are returning a PageObject related to this new site as a result i.e. calling the method clickResultsPage() in MainPage page object will click the link and return an ResultsPage page object as a result. Then we can interact with this new page object.
+
+The last level of the framework are the methods implemented in concrete PageObject classes and a public methods from the PageObject. Those methods can be called directly in test's code. The methods implemented in classes extending the PageObject are grouping some common functionalities related with particular pages in like choosing a tournament or a season. The public methods in PageObject class allows to interact with page elements like clicking them, sending keys, ticking the checkbox, setting the drop down value etc. Those interactions are also available for WebElement objects from Selenium but again we are not manipulating directly on them to be less dependent on the external framework. One of the interesting methods is the **clickAndWaitForPageToLoad(T element, String... placeholders)**. Sometimes in the application application there is a lot of buttons and other controls that arecausing the page to reload. To be sure that we are checking the state of the control after the reload not before or during it, we can call this method for an element that is causing the page to reload. PageObject will then take care of everything.
 
 ##Tests organization
 
@@ -63,7 +67,7 @@ All the test are following the GIVEN - WHEN - THEN convention with a proper comm
 ###Test suites
 
 Some of the tests are requiring some pre steps. To achieve that we can use the @RunWith(Suite.class) annotation. Then in @Suite.SuiteClasses annotation you can add the test
-classes which you want to be part of the suite. The order in which you will list the classes will be followed.
+classes which you want to be part of the suite. The order in which you will list the classes will be followed. In this place we are assuming the usage of **JUnit** framework.
 
 ###MasterSuite
 
