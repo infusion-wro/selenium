@@ -153,7 +153,7 @@ public class PageObject<T extends PageElement> {
     }
 
     public void shouldHaveEnabled(T element, String... placeholders) throws UiSeleniumTestException {
-        if (isEnabled(element, placeholders)) {
+        if (!isEnabled(element, placeholders)) {
             throw new UiSeleniumTestException("Element located by %s = '%s' is not enabled.", element.getType(),
                     element.getExpression());
         }
