@@ -6,6 +6,7 @@ import pageobject.impl.results.ResultsPage;
 import pageobject.impl.results.element.ResultRow;
 import selenium.UiSeleniumTest;
 
+import static pageobject.impl.results.element.ResultRow.aResultRow;
 import static pageobject.impl.results.element.ResultsPageElement.GO_BUTTON;
 import static pageobject.impl.results.element.ResultsPageElement.RESULTS_ROW;
 import static pageobject.impl.results.element.dropdown.SeasonDropDownValue.SEASON_2015_2014;
@@ -23,9 +24,7 @@ public class SampleTest extends UiSeleniumTest {
         MainPage mainPage = new MainPage(SESSION);
         ResultsPage resultsPage = mainPage.clickResultsPage();
 
-        ResultRow.Builder resultRowBuilder = new ResultRow.Builder();
-        resultRowBuilder.withDate(DATE).withTournament(TOURNAMENT).withMatch(MATCH);
-        ResultRow resultRow = resultRowBuilder.create();
+        ResultRow resultRow = aResultRow().withDate(DATE).withTournament(TOURNAMENT).withMatch(MATCH).create();
 
         // when
         resultsPage.selectTournament(OFFICIAL_MATCHES);

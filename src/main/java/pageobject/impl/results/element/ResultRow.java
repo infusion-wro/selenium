@@ -14,11 +14,17 @@ public class ResultRow implements PlaceholdersProvider {
         this.match = builder.match;
     }
 
+    public static Builder aResultRow() {
+        return new Builder();
+    }
+
     public static class Builder {
 
         private String date;
         private String tournament;
         private String match;
+
+        private Builder() {}
 
         public Builder withDate(String date) {
             this.date = date;
